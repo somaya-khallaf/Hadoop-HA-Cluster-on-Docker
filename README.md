@@ -1,5 +1,5 @@
 # Hadoop-HA-Cluster-on-Docker
-A production-ready, highly available Hadoop cluster (HDFS + YARN) containerized with Docker Compose. Features automatic failover, horizontal scaling
+This project provides a production-ready, highly available Hadoop cluster environment, fully containerized using Docker Compose. The setup includes HDFS High Availability (HA) with automatic failover, YARN ResourceManager HA, and supports horizontal scalability of DataNodes. 
 
 ![Hadoop HA Architecture](Hadoop_Architecture.png)
 
