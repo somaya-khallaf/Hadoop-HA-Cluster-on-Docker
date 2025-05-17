@@ -101,9 +101,9 @@ hdfs dfsadmin -report
 docker run -d \
   --name worker2 \
   --hostname worker2 \
-  --network docker_hadoop_net \
+  --network hadoop_net \
   -e ROLE=worker \
-  -v ${PWD}/hadoop:/home/hadoop/config \
+  -v datanode:/hadoopdata/datanode \
   hadoop-cluster:latest
 ```
 
