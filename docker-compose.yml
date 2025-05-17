@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  master1:
+    image: hadoop-cluster:latest
+    hostname: master1
+    container_name: master1
+    environment:
+      - ROLE=master
+    ports:
+      - "9871:9870" 
+      - "8081:8088"
+    volumes:
+      - ./code:/code:ro
+      - namenode1:/hadoopdata/namenode
+      - journalnode1:/hadoopdata/journalnode
+    networks:
+      - hadoop_net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"] 
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+
+  master2:
+    image: hadoop-cluster:latest
+    hostname: master2
+    container_name: master2
+    environment:
+      - ROLE=master
+    ports:
+      - "9872:9870" 
+      - "8082:8088" 
+    volumes:
+      - ./code:/code:ro
+      - namenode2:/hadoopdata/namenode
+      - journalnode2:/hadoopdata/journalnode
+    networks:
+      - hadoop_net
+    depends_on:
+      master1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+
+  master3:
+    image: hadoop-cluster:latest
+    hostname: master3
+    container_name: master3
+    environment:
+      - ROLE=master
+    ports:
+      - "9873:9870"
+      - "8083:8088"
+    volumes:
+      - ./code:/code:ro
+      - namenode3:/hadoopdata/namenode
+      - journalnode3:/hadoopdata/journalnode
+    networks:
+      - hadoop_net
+    depends_on:
+      master1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+
+  worker1:
+    image: hadoop-cluster:latest
+    hostname: worker1
+    container_name: worker1
+    environment:
+      - ROLE=worker 
+    volumes:
+      - datanode:/hadoopdata/datanode
+    networks:
+      - hadoop_net
+    depends_on:
+      master1:
+        condition: service_healthy
+      master2:
+        condition: service_healthy
+      master3:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+networks:
+  hadoop_net:
+    driver: bridge
+
+volumes:
+  namenode1:
+  namenode2:
+  namenode3:
+  journalnode1:
+  journalnode2:
+  journalnode3:
+  datanode:
