@@ -1,6 +1,8 @@
 # Hadoop-HA-Cluster-on-Docker
 A production-ready, highly available Hadoop cluster (HDFS + YARN) containerized with Docker Compose. Features automatic failover, horizontal scaling
 
+![Hadoop HA Architecture](Hadoop_Architecture.png)
+
 ## Cluster Architecture
 
 - **3 Master Nodes** (master1, master2, master3):
@@ -12,7 +14,6 @@ A production-ready, highly available Hadoop cluster (HDFS + YARN) containerized 
   - Datanode
   - NodeManager
 
-![Hadoop HA Architecture](Hadoop_Architecture.png)
 
 ## Project Structure
 
